@@ -73,7 +73,7 @@ class TeamLoader(ItemLoader):
 class PlayerLoader(ItemLoader):
     default_output_processor = TakeFirst()
 
-    player_id_in = MapCompose(int)
+    id_in = MapCompose(int)
     birthday_in = MapCompose(missing_values, parse_date, template="MMMM D, YYYY")
     birthday_out = Compose(lambda x: x[0].datetime)
     weight_in = MapCompose(missing_values, parse_weight)
