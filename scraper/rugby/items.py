@@ -17,7 +17,11 @@ class Match(Item):
     won = Field()
     match_type = Field()
     date = Field()
+class Venue(Item):
+    """Data structure to store venue  info"""
 
+    id = Field()
+    name = Field()
 class MatchStats(Item):
     """Data structure to store basic match stats"""
 

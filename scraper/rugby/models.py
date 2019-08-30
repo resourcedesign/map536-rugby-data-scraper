@@ -15,6 +15,10 @@ class Team(Base):
 
     id = Column(Integer, primary_key = True)
     name = Column(String(80), nullable = False)
+class Venue(Base):
+    __tablename__ = "venues"
+    id = Column(Integer, primary_key = True)
+    name = Column(String(80), nullable = False)
 
 class Match(Base):
     __tablename__ = "matchs"

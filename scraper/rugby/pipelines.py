@@ -34,6 +34,8 @@ class RugbyScraperPipeline(object):
                 self._unique_insert(session, models.Match, item)
             elif isinstance(item, items.Player):
                 self._unique_insert(session, models.Player, item)
+            elif isinstance(item, items.Venue):
+                self._unique_insert(session, models.Venue, item)
             elif isinstance(item, items.Team):
                 self._unique_insert(session, models.Team, item)
             elif isinstance(item, items.MatchStats):

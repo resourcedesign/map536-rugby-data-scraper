@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import regex
+from pprint import pprint
+
 from urllib.parse import urljoin
 from collections import defaultdict, OrderedDict
 
@@ -8,8 +10,8 @@ from scrapy import Request
 from scrapy.spiders import Spider
 from scrapy.exceptions import CloseSpider
 
-from rugby.items import Match, MatchStats, Team, Player, PlayerStats, GameEvent, MatchExtraStats, PlayerExtraStats
-from rugby.loaders import MatchLoader, MatchStatsLoader, TeamLoader, PlayerLoader, PlayerStatsLoader, GameEventLoader, MatchExtraStatsLoader, PlayerExtraStatsLoader
+from rugby.items import Match, MatchStats, Team, Player, PlayerStats, GameEvent, MatchExtraStats, PlayerExtraStats, Venue
+from rugby.loaders import MatchLoader, MatchStatsLoader, TeamLoader, PlayerLoader, PlayerStatsLoader, GameEventLoader, MatchExtraStatsLoader, PlayerExtraStatsLoader, VenueLoader
 
 class ESPN(Spider):
     """Main spider of the scraper, targeting http://stats.espnscrum.com"""
@@ -101,7 +103,7 @@ class ESPN(Spider):
             'id': 'li:nth-child(6) > a::attr(href)',
             'home_team_id': 'li:nth-child(3) > a::attr(href)',
             'away_team_id': 'li:nth-child(4) > a::attr(href)',
-            'ground_id': 'li:nth-child(5) > a::attr(href)',
+            'ground_id': 'li:nth-child(5) > a::attr(href)'
         }
 
         meta_fields = {
@@ -479,6 +481,13 @@ class ESPN(Spider):
         if not tokens:
             self.logger.error("[{}] Can't extract headline. Skipping match ...".format(match["id"]))
             return
+        notes = response.xpath("//td[@class=\"liveTblNotes\"]/a/text()")
+        if len(notes) == 2:
+            loader = VenueLoader(item = Venue())
+            loader.add_value("id", match["ground_id"])
+            loader.add_value("name", notes[0].get())
+            venue = loader.load_item()
+            yield venue
 
         headlines = "".join([item.rstrip().replace("\n", "") for item in tokens.extract()]).split(" - ")
         if len(headlines) == 2:

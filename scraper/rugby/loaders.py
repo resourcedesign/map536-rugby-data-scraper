@@ -64,6 +64,9 @@ class MatchExtraStatsLoader(ItemLoader):
     default_input_processor = MapCompose(int)
     default_output_processor = TakeFirst()
 
+class VenueLoader(ItemLoader):
+    default_output_processor = TakeFirst()
+
 class TeamLoader(ItemLoader):
     default_input_processor = MapCompose(missing_values, int)
     default_output_processor = TakeFirst()
